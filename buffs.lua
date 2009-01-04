@@ -1,4 +1,4 @@
-local b, d = 1, 1
+local buff, debuff = 1, 1
 
 local updateIcon = function(name, id)
 	local icon = _G[('%s%dIcon'):format(name, id)]
@@ -14,22 +14,23 @@ local addon = CreateFrame'Frame'
 
 function addon:UNIT_AURA(unit)
 	if(unit == 'player') then
-		if(b ~= BUFF_MAX_DISPLAY) then
-			while(updateIcon('BuffButton', b)) do
-				b = b + 1
+		if(buff ~= BUFF_MAX_DISPLAY) then
+			while(updateIcon('BuffButton', buff)) do
+				buff = buff + 1
 			end
 		end
 
-		if(d ~= DEBUFF_MAX_DISPLAY) then
-			while(updateIcon('DebuffButton', d)) do
-				d = d + 1
+		if(debuff ~= DEBUFF_MAX_DISPLAY) then
+			while(updateIcon('DebuffButton', debuff)) do
+				debuff = debuff + 1
 			end
 		end
 	end
 
-	if(b == BUFF_MAX_DISPLAY and d == DEBUFF_MAX_DISPLAY) then
+	if(buff == BUFF_MAX_DISPLAY and debuff == DEBUFF_MAX_DISPLAY) then
 		self:UnregisterEvent'UNIT_AURA'
 		self.UNIT_AURA = nil
+		self:SetScript('OnEvent', nil)
 		updateIcon = nil
 	end
 end
