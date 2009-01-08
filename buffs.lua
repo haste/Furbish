@@ -22,6 +22,7 @@ local updateIcon = function(name, id)
 
 		-- Let's outsmart it!
 		if(border) then
+			border:SetWidth(border:GetHeight())
 			border:SetTexture(1, 1, 1)
 			border:SetBlendMode'MOD'
 		end
