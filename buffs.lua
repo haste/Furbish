@@ -15,10 +15,12 @@ local updateIcon = function(name, id)
 		duration:ClearAllPoints()
 		-- We use x:1, due to my font
 		duration:SetPoint('BOTTOM', 1, 1)
+		duration:SetDrawLayer'OVERLAY'
 
 		-- We use y:-2, as the text is larger...
 		count:ClearAllPoints()
 		count:SetPoint('TOP', 1, -2)
+		count:SetDrawLayer'OVERLAY'
 
 		-- Let's outsmart it!
 		if(border) then
