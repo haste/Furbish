@@ -39,7 +39,7 @@ local env = setmetatable({
 	NORMAL_FONT_COLOR = {r = 1, g = 1, b = 1}
 }, {__index = _G})
 
-setfenv(BuffFrame_UpdateDuration, env)
+setfenv(AuraButton_UpdateDuration, env)
 
 local addon = CreateFrame'Frame'
 
