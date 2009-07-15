@@ -40,11 +40,20 @@ end
 
 -- Env. proxy, it's here to make the aura duration white, without hooking or
 -- changing the real global.
-local env = setmetatable({
-	NORMAL_FONT_COLOR = {r = 1, g = 1, b = 1},
-	BUFFS_PER_ROW = 12,
-}, {__index = _G})
 
+local proxy = {
+	NORMAL_FONT_COLOR = {r = 1, g = 1, b = 1},
+}
+
+-- Handle widescreen correctly.
+local width, height = string.split('x', GetCVar'gxResolution')
+if(width/height > 4/3) then
+	proxy.BUFFS_PER_ROW = 12
+else
+	proxy.BUFFS_PER_ROW = 8
+end
+
+local env = setmetatable(proxy, {__index = _G})
 setfenv(AuraButton_UpdateDuration, env)
 setfenv(BuffButton_UpdateAnchors, env)
 setfenv(DebuffButton_UpdateAnchors, env)
