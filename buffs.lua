@@ -1,5 +1,10 @@
-local buff, debuff = 1, 1
+-- Some global madness:
+BUFF_ROW_SPACING = 5
+BuffFrame_UpdatePositions = function()
+	BuffFrame_Update()
+end
 
+local buff, debuff = 1, 1
 local updateIcon = function(name, id)
 	local base = _G[('%s%d'):format(name, id)]
 	local icon = _G[('%s%dIcon'):format(name, id)]
@@ -36,10 +41,13 @@ end
 -- Env. proxy, it's here to make the aura duration white, without hooking or
 -- changing the real global.
 local env = setmetatable({
-	NORMAL_FONT_COLOR = {r = 1, g = 1, b = 1}
+	NORMAL_FONT_COLOR = {r = 1, g = 1, b = 1},
+	BUFFS_PER_ROW = 12,
 }, {__index = _G})
 
 setfenv(AuraButton_UpdateDuration, env)
+setfenv(BuffButton_UpdateAnchors, env)
+setfenv(DebuffButton_UpdateAnchors, env)
 
 local addon = CreateFrame'Frame'
 
