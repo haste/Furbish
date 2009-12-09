@@ -55,7 +55,7 @@ end
 
 local env = setmetatable(proxy, {__index = _G})
 setfenv(AuraButton_UpdateDuration, env)
-setfenv(BuffButton_UpdateAnchors, env)
+setfenv(BuffFrame_UpdateAllBuffAnchors, env)
 setfenv(DebuffButton_UpdateAnchors, env)
 
 local addon = CreateFrame'Frame'
