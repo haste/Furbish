@@ -1,8 +1,7 @@
 -- Some global madness:
-BUFF_ROW_SPACING = 5
-BuffFrame_UpdatePositions = function()
-	BuffFrame_Update()
-end
+hooksecurefunc('BuffFrame_UpdatePositions', function()
+	BUFF_ROW_SPACING = 5
+end)
 
 local buff, debuff = 1, 1
 local updateIcon = function(name, id)
