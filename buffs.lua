@@ -86,19 +86,16 @@ function addon:PLAYER_ENTERING_WORLD()
 	self:UNIT_AURA'player'
 
 	-- Do the temp enchants
-	updateIcon('TempEnchant', 1)
-	updateIcon('TempEnchant', 2)
-
 	local r, g, b = 136/255, 57/255, 184/255
-	TempEnchant1Border:SetTexture(1, 1, 1)
-	TempEnchant1Border:SetVertexColor(r, g, b)
-	TempEnchant1Border:SetBlendMode'MOD'
-	TempEnchant1Duration:SetDrawLayer"OVERLAY"
+	for i = 1, 3 do
+		updateIcon('TempEnchant', i)
 
-	TempEnchant2Border:SetTexture(1, 1, 1)
-	TempEnchant2Border:SetVertexColor(r, g, b)
-	TempEnchant2Border:SetBlendMode'MOD'
-	TempEnchant2Duration:SetDrawLayer"OVERLAY"
+		local fn = _G['TempEnchant' .. i .. 'Border']
+		fn:SetTexture(1, 1, 1)
+		fn:SetVertexColor(r, g, b)
+		fn:SetBlendMode'MOD'
+		_G['TempEnchant' .. i .. 'Duration']:SetDrawLayer'OVERLAY'
+	end
 
 	self:UnregisterEvent'PLAYER_ENTERING_WORLD'
 	self.PLAYER_ENTERING_WORLD = nil
