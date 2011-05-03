@@ -1,9 +1,9 @@
-## Interface: 40000
+## Interface: 40100
 ## Title: Furbish
 ## Author: Haste
 ## Version: 1.2
 ## X-eMail: troeks@gmail.com
-## Notes: Simple add-on to reskin the aura icons. Since all the others suck...
+## Notes: Because the world needs yet another aura add-on.
 
 Furbish.xml
 furbish.lua
