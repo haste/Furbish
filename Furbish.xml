@@ -1,0 +1,25 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Button name="FurbishAuraTemplate" inherits="SecureActionButtonTemplate" virtual="true">
+		<Size x="30" y="30"/>
+
+		<Attributes>
+			<Attribute name="type" value="cancelaura"/>
+		</Attributes>
+
+		<Scripts>
+			<OnLoad>
+				-- Avoiding XML 101:
+				Furbish.Skin(self)
+
+				self:RegisterForClicks'RightButtonUp'
+			</OnLoad>
+
+			<OnEnter>
+				GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMLEFT')
+				GameTooltip:SetUnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self.filter)
+			</OnEnter>
+
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+</Ui>

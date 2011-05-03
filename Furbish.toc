@@ -5,4 +5,6 @@
 ## X-eMail: troeks@gmail.com
 ## Notes: Simple add-on to reskin the aura icons. Since all the others suck...
 
-buffs.lua
+Furbish.xml
+furbish.lua
+header.lua
