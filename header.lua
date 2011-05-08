@@ -1,3 +1,5 @@
+local name, namespace = ...
+
 for _, name in next, {
 	'FurbishPlayerBuffs',
 	'FurbishPlayerDebuffs',
@@ -21,6 +23,8 @@ for _, name in next, {
 	header:SetAttribute('wrapYOffset', -35)
 
 	header:SetSize(30, 30)
+
+	table.insert(namespace, header)
 end
 
 FurbishPlayerBuffs:SetPoint('TOPRIGHT', UIParent, -158, -13)

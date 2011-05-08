@@ -1,3 +1,4 @@
+local name, namespace = ...
 local Furbish = CreateFrame('Frame', 'Furbish')
 
 local OnUpdate = function(self, elapsed)
@@ -91,6 +92,24 @@ local Skin = function(self)
 
 	self.filter = self:GetParent():GetAttribute'filter'
 end
+
+Furbish:SetScript('OnEvent', function(self, event, ...)
+	self[event](self, event, ...)
+end)
+
+function Furbish:PLAYER_ENTERING_WORLD()
+	for _, header in next, namespace do
+		local child = header:GetAttribute'child1'
+		local i = 1
+		while(child) do
+			Update(child, child:GetID())
+
+			i = i + 1
+			child = header:GetAttribute('child' .. i)
+		end
+	end
+end
+Furbish:RegisterEvent'PLAYER_ENTERING_WORLD'
 
 -- Expose ourselves:
 for name, func in next, {
