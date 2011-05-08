@@ -33,6 +33,8 @@ local Update = function(self, index)
 				self.timeLeft = expirationTime - GetTime()
 			end
 		else
+			self.timeLeft = nil
+			self.Duration:SetText''
 			self:SetScript('OnUpdate', nil)
 		end
 
