@@ -18,6 +18,7 @@ for _, name in next, {
 	header:SetAttribute('minHeight', 35)
 	header:SetAttribute('minWidth', wrap * 35)
 	header:SetAttribute('wrapAfter', wrap)
+	header:SetAttribute('wrapYOffset', -35)
 
 	header:SetSize(30, 30)
 end
