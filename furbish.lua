@@ -10,6 +10,15 @@ local OnUpdate = function(self, elapsed)
 	elseif(timeLeft < 3600) then
 		local m = math.floor(timeLeft / 60)
 		if(m == 0) then
+			local animation = self.Animation
+			if(timeLeft < 31) then
+				if(not animation:IsPlaying()) then
+					animation:Play()
+				end
+			elseif(animation:IsPlaying()) then
+				animation:Stop()
+			end
+
 			self.Duration:SetFormattedText('%d', timeLeft % 60)
 		else
 			self.Duration:SetFormattedText('%d:%02d', m, timeLeft % 60)
@@ -27,13 +36,25 @@ local Update = function(self, index)
 	local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura('player', index, self.filter)
 	if(name) then
 		if(duration > 0 and expirationTime) then
+			local timeLeft = expirationTime - GetTime()
 			if(not self.timeLeft) then
-				self.timeLeft = expirationTime - GetTime()
+				self.timeLeft = timeLeft
 				self:SetScript('OnUpdate', OnUpdate)
 			else
-				self.timeLeft = expirationTime - GetTime()
+				self.timeLeft = timeLeft
+			end
+
+			-- We do the check here as well, that way we don't have to check on
+			-- every single OnUpdate call.
+			if(timeLeft < 31) then
+				if(not self.Animation:IsPlaying()) then
+					self.Animation:Play()
+				end
+			elseif(self.Animation:IsPlaying()) then
+				self.Animation:Stop()
 			end
 		else
+			self.Animation:Stop()
 			self.timeLeft = nil
 			self.Duration:SetText''
 			self:SetScript('OnUpdate', nil)
@@ -86,6 +107,16 @@ local Skin = function(self)
 	Overlay:SetSize(33, 32)
 	Overlay:SetTexCoord(.296875, .5703125, 0, .515625)
 	self.Overlay = Overlay
+
+	local Animation = self:CreateAnimationGroup()
+	Animation:SetLooping'BOUNCE'
+
+	local FadeOut = Animation:CreateAnimation'Alpha'
+	FadeOut:SetChange(-.7)
+	FadeOut:SetDuration(.7)
+	FadeOut:SetSmoothing'IN_OUT'
+
+	self.Animation = Animation
 
 	-- Kinda meh way to piggyback on the secure aura headers update loop.
 	self:SetScript('OnAttributeChanged', OnAttributeChanged)
