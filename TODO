@@ -1,8 +1,0 @@
-* Manually implement vehicle support by switching the unit attribute through a
-  secure state drive or something smart.
-* Find some good and highly visible solution for debuff overlays, which doesn't
-  hide the aura icon beneath it.
-* Implement low duration flashing.
-* Add buff consildation.
-* Add temp. enchants.
-* Review font sizes!
