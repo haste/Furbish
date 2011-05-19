@@ -97,7 +97,6 @@ local UpdateTempEnchant = function(self, slot)
 	local expiration = select(offset, GetWeaponEnchantInfo())
 	if(expiration) then
 		self.offset = offset
-		self.timeLeft = expiration / 1e3
 		self:SetScript('OnUpdate', OnUpdate)
 	else
 		self.offset = nil
