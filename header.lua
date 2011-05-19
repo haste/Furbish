@@ -6,6 +6,7 @@ for _, name in next, {
 } do
 	local header = CreateFrame('Frame', name, UIParent, 'SecureAuraHeaderTemplate')
 	header:SetAttribute('template', 'FurbishAuraTemplate')
+	header:SetAttribute('weaponTemplate', 'FurbishAuraTemplate')
 	header:SetAttribute('unit', 'player')
 	header:SetAttribute('xOffset', -35)
 

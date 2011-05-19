@@ -5,8 +5,19 @@ local OnUpdate = function(self, elapsed)
 	local timeLeft = self.timeLeft - elapsed
 	self.timeLeft = timeLeft
 
+	-- Handle refreshing of temporary enchants.
+	if(self.offset) then
+		local expiration = select(self.offset, GetWeaponEnchantInfo())
+		if(expiration) then
+			self.timeLeft = expiration / 1e3
+		else
+			self.timeLeft = 0
+		end
+	end
+
 	if(timeLeft <= 0) then
-		return self.Duration:SetText''
+		self.Duration:SetText''
+		return self:SetScript('OnUpdate', nil)
 	elseif(timeLeft < 3600) then
 		local m = math.floor(timeLeft / 60)
 		if(m == 0) then
@@ -32,7 +43,7 @@ local OnUpdate = function(self, elapsed)
 	end
 end
 
-local Update = function(self, index)
+local UpdateAura = function(self, index)
 	local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura('player', index, self.filter)
 	if(name) then
 		if(duration > 0 and expirationTime) then
@@ -77,9 +88,29 @@ local Update = function(self, index)
 	end
 end
 
+local UpdateTempEnchant = function(self, slot)
+	self.Icon:SetTexture(GetInventoryItemTexture('player', slot))
+	self.Overlay:SetVertexColor(136/255, 57/255, 184/255)
+
+	-- I'm afraid we'll need to use... MATH!
+	local offset = 3 * (slot - 16) + 2
+	local expiration = select(offset, GetWeaponEnchantInfo())
+	if(expiration) then
+		self.offset = offset
+		self.timeLeft = expiration / 1e3
+		self:SetScript('OnUpdate', OnUpdate)
+	else
+		self.offset = nil
+		self.timeLeft = nil
+		self:SetScript('OnUpdate', nil)
+	end
+end
+
 local OnAttributeChanged = function(self, attribute, value)
 	if(attribute == 'index') then
-		return Update(self, value)
+		return UpdateAura(self, value)
+	elseif(attribute == 'target-slot') then
+		return UpdateTempEnchant(self, value)
 	end
 end
 
@@ -133,7 +164,7 @@ function Furbish:PLAYER_ENTERING_WORLD()
 		local child = header:GetAttribute'child1'
 		local i = 1
 		while(child) do
-			Update(child, child:GetID())
+			UpdateAura(child, child:GetID())
 
 			i = i + 1
 			child = header:GetAttribute('child' .. i)
