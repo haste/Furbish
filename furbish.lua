@@ -16,6 +16,9 @@ local OnUpdate = function(self, elapsed)
 	end
 
 	if(timeLeft <= 0) then
+		-- Kill the tracker so we don't end up with stuck timers.
+		self.timeLeft = nil
+
 		self.Duration:SetText''
 		return self:SetScript('OnUpdate', nil)
 	elseif(timeLeft < 3600) then
