@@ -47,7 +47,7 @@ local OnUpdate = function(self, elapsed)
 end
 
 local UpdateAura = function(self, index)
-	local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura('player', index, self.filter)
+	local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff = UnitAura(self:GetParent():GetAttribute'unit', index, self.filter)
 	if(name) then
 		if(duration > 0 and expirationTime) then
 			local timeLeft = expirationTime - GetTime()

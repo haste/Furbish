@@ -25,6 +25,9 @@ for _, name in next, {
 
 	header:SetSize(30, 30)
 
+	-- Swap the unit to vehicle when we enter a vehicle *gasp*.
+	RegisterAttributeDriver(header, 'unit', '[vehicleui] vehicle; player')
+
 	table.insert(namespace, header)
 end
 
