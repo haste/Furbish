@@ -117,44 +117,54 @@ local OnAttributeChanged = function(self, attribute, value)
 end
 
 local Skin = function(self)
+	local proxy = self:GetName():sub(-11) == 'ProxyButton'
 	local Icon = self:CreateTexture(nil, 'BORDER')
 	Icon:SetTexCoord(.07, .93, .07, .93)
 	Icon:SetAllPoints(self)
 	self.Icon = Icon
-
-	local Duration = self:CreateFontString(nil, 'OVERLAY')
-	Duration:SetFontObject(SystemFont_Outline_Small)
-	Duration:SetPoint('BOTTOM', 1, 1)
-	self.Duration = Duration
 
 	local Count = self:CreateFontString(nil, 'OVERLAY')
 	Count:SetFontObject(NumberFontNormal)
 	Count:SetPoint('TOP', self, 1, -4)
 	self.Count = Count
 
-	-- Use the default overlay texture until I can figure out something
-	-- that looks... less shit
-	local Overlay = self:CreateTexture(nil, 'OVERLAY')
-	Overlay:SetTexture[[Interface\Buttons\UI-Debuff-Overlays]]
-	Overlay:SetPoint'CENTER'
-	Overlay:SetSize(33, 32)
-	Overlay:SetTexCoord(.296875, .5703125, 0, .515625)
-	self.Overlay = Overlay
+	if(not proxy) then
+		local Duration = self:CreateFontString(nil, 'OVERLAY')
+		Duration:SetFontObject(SystemFont_Outline_Small)
+		Duration:SetPoint('BOTTOM', 1, 1)
+		self.Duration = Duration
 
-	local Animation = self:CreateAnimationGroup()
-	Animation:SetLooping'BOUNCE'
+		-- Use the default overlay texture until I can figure out something
+		-- that looks... less shit
+		local Overlay = self:CreateTexture(nil, 'OVERLAY')
+		Overlay:SetTexture[[Interface\Buttons\UI-Debuff-Overlays]]
+		Overlay:SetPoint'CENTER'
+		Overlay:SetSize(33, 32)
+		Overlay:SetTexCoord(.296875, .5703125, 0, .515625)
+		self.Overlay = Overlay
 
-	local FadeOut = Animation:CreateAnimation'Alpha'
-	FadeOut:SetChange(-.7)
-	FadeOut:SetDuration(.7)
-	FadeOut:SetSmoothing'IN_OUT'
+		local Animation = self:CreateAnimationGroup()
+		Animation:SetLooping'BOUNCE'
 
-	self.Animation = Animation
+		local FadeOut = Animation:CreateAnimation'Alpha'
+		FadeOut:SetChange(-.7)
+		FadeOut:SetDuration(.7)
+		FadeOut:SetSmoothing'IN_OUT'
 
-	-- Kinda meh way to piggyback on the secure aura headers update loop.
-	self:SetScript('OnAttributeChanged', OnAttributeChanged)
+		self.Animation = Animation
 
-	self.filter = self:GetParent():GetAttribute'filter'
+		-- Kinda meh way to piggyback on the secure aura headers update loop.
+		self:SetScript('OnAttributeChanged', OnAttributeChanged)
+
+		self.filter = self:GetParent():GetAttribute'filter'
+	else
+		local Overlay = self:CreateTexture(nil, 'OVERLAY')
+		Overlay:SetTexture[[Interface\Buttons\BuffConsolidation]]
+		Overlay:SetPoint'CENTER'
+		Overlay:SetSize(64, 64)
+		Overlay:SetTexCoord(0, .5, 0, 1)
+		self.Overlay = Overlay
+	end
 end
 
 Furbish:SetScript('OnEvent', function(self, event, ...)

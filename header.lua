@@ -3,11 +3,16 @@ local name, namespace = ...
 for _, name in next, {
 	'FurbishPlayerBuffs',
 	'FurbishPlayerDebuffs',
+	'FurbishPlayerConsolidate',
 } do
-	local header = CreateFrame('Frame', name, UIParent, 'SecureAuraHeaderTemplate')
+	local header
+	if(name == 'FurbishPlayerConsolidate') then
+		header = CreateFrame('Frame', name, UIParent, 'SecureFrameTemplate')
+	else
+		header = CreateFrame('Frame', name, UIParent, 'SecureAuraHeaderTemplate')
+	end
 	header:SetAttribute('template', 'FurbishAuraTemplate')
 	header:SetAttribute('weaponTemplate', 'FurbishAuraTemplate')
-	header:SetAttribute('unit', 'player')
 	header:SetAttribute('xOffset', -35)
 
 	local wrap
@@ -31,13 +36,76 @@ for _, name in next, {
 	table.insert(namespace, header)
 end
 
-FurbishPlayerBuffs:SetPoint('TOPRIGHT', UIParent, -158, -13)
-FurbishPlayerBuffs:SetAttribute('filter', 'HELPFUL')
-FurbishPlayerBuffs:Show()
+local buffs = FurbishPlayerBuffs
+local debuffs = FurbishPlayerDebuffs
+local consolidate = FurbishPlayerConsolidate
 
-FurbishPlayerDebuffs:SetPoint('TOP', FurbishPlayerBuffs, 'BOTTOM', 0, -35)
-FurbishPlayerDebuffs:SetAttribute('filter', 'HARMFUL')
-FurbishPlayerDebuffs:Show()
+buffs:SetPoint('TOPRIGHT', UIParent, -358, -13)
+buffs:SetAttribute('filter', 'HELPFUL')
+buffs:SetAttribute('consolidateProxy', CreateFrame('Frame', buffs:GetName() .. 'ProxyButton', buffs, 'FurbishProxyTemplate'))
+buffs:SetAttribute('consolidateHeader', consolidate)
+buffs:SetAttribute('consolidateTo', 1)
+buffs:SetAttribute('consolidateDuration', -1)
+buffs:Show()
+
+local proxy = buffs:GetAttribute'consolidateProxy'
+proxy:SetAttribute('_onenter', [[
+	local header = self:GetFrameRef'header'
+	local background = self:GetFrameRef'background'
+
+	local numChild = 0
+	repeat
+		numChild = numChild + 1
+		local child = header:GetFrameRef('child' .. numChild)
+	until not child or not child:IsShown()
+
+	numChild = numChild - 1
+
+	header:SetWidth(35 * numChild)
+	header:SetHeight(30)
+
+	background:SetWidth(header:GetWidth() + 8)
+	background:SetHeight(header:GetHeight() + 8)
+
+	header:ClearAllPoints()
+	header:SetPoint('TOP', self, 'BOTTOM', 0, 4)
+	header:Show()
+]])
+
+proxy:SetAttribute('_onleave', [[
+	local header = self:GetFrameRef'header'
+	if(not header:IsUnderMouse()) then
+		header:Hide()
+	else
+		header:RegisterAutoHide(.3)
+		local numChild = 1
+		local child = header:GetFrameRef('child' .. numChild)
+		while(child) do
+			header:AddToAutoHide(child)
+			numChild = numChild + 1
+			child = header:GetFrameRef('child' .. numChild)
+		end
+	end
+]])
+
+consolidate:SetAttribute('point', 'RIGHT')
+consolidate:SetAttribute('minHeight', nil)
+consolidate:SetAttribute('minWidth', nil)
+consolidate:SetParent(proxy)
+
+local background = CreateFrame('Frame', consolidate:GetName() .. 'Background', consolidate)
+background:SetPoint('CENTER', 2, 0)
+background:SetBackdrop(GameTooltip:GetBackdrop())
+background:SetBackdropColor(0, 0, 0)
+background:SetBackdropBorderColor(.3, .3, .3)
+background:Show()
+
+SecureHandlerSetFrameRef(proxy, 'background', background)
+SecureHandlerSetFrameRef(proxy, 'header', consolidate)
+
+debuffs:SetPoint('TOP', buffs, 'BOTTOM', 0, -35)
+debuffs:SetAttribute('filter', 'HARMFUL')
+debuffs:Show()
 
 do
 	for _, frame in ipairs{

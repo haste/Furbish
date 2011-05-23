@@ -18,7 +18,7 @@
 				GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMLEFT')
 				if(self:GetAttribute'index') then
 					GameTooltip:SetUnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self.filter)
-				else
+				elseif(self:GetAttribute'target-slot') then
 					GameTooltip:SetInventoryItem('player', self:GetID())
 				end
 			</OnEnter>
@@ -26,4 +26,15 @@
 			<OnLeave function="GameTooltip_Hide" />
 		</Scripts>
 	</Button>
+
+	<Frame name="FurbishProxyTemplate" inherits="SecureHandlerEnterLeaveTemplate" virtual="true">
+		<Size x="30" y="30"/>
+
+		<Scripts>
+			<OnLoad>
+				-- Avoiding XML 101:
+				Furbish.Skin(self)
+			</OnLoad>
+		</Scripts>
+	</Frame>
 </Ui>
