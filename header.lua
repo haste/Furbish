@@ -40,7 +40,7 @@ local buffs = FurbishPlayerBuffs
 local debuffs = FurbishPlayerDebuffs
 local consolidate = FurbishPlayerConsolidate
 
-buffs:SetPoint('TOPRIGHT', UIParent, -358, -13)
+buffs:SetPoint('TOPRIGHT', UIParent, -158, -13)
 buffs:SetAttribute('filter', 'HELPFUL')
 buffs:SetAttribute('consolidateProxy', CreateFrame('Frame', buffs:GetName() .. 'ProxyButton', buffs, 'FurbishProxyTemplate'))
 buffs:SetAttribute('consolidateHeader', consolidate)
