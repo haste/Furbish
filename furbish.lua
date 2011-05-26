@@ -130,7 +130,8 @@ local Skin = function(self)
 
 	if(not proxy) then
 		local Duration = self:CreateFontString(nil, 'OVERLAY')
-		Duration:SetFontObject(SystemFont_Outline_Small)
+		local fontPath, size, flags = SystemFont_Outline_Small:GetFont()
+		Duration:SetFont(fontPath, size - 1, flags)
 		Duration:SetPoint('BOTTOM', 1, 1)
 		self.Duration = Duration
 
