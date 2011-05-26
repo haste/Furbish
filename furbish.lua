@@ -39,7 +39,7 @@ local OnUpdate = function(self, elapsed)
 		end
 	else
 		self.Duration:SetFormattedText(
-			'%d.%2dh',
+			'%dh%2dm',
 			math.floor(timeLeft / 3600),
 			math.floor((timeLeft % 3600) / 60)
 		)
